@@ -22,7 +22,7 @@ allprojects {
 dependencies {
     // other dependencies here
     
-	        implementation 'com.github.cren90:livedataktx:<version>'
+	        implementation 'com.github.cren90:LiveDataKTX:<version>'
 	}
 ```
 
