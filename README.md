@@ -1,4 +1,4 @@
-# SpannableKtx
+# LiveDataKtx
 A simple set of Kotlin extension functions to make dealing with LiveData just a little easier
 
 ### Specs
