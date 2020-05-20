@@ -30,6 +30,28 @@ inline fun <T> dependentLiveData(vararg dependencies: LiveData<*>, crossinline m
         }
     }
 
+inline fun <T> LiveData<T>.observeChange(): LiveData<T> {
+    val changedLiveData = MediatorLiveData<T>()
+    changedLiveData.addSource(this, object : Observer<T> {
+        private var isInitialized = false
+        private var lastValue: T? = null
+
+        override fun onChanged(newValue: T) {
+            if (!isInitialized) {
+                isInitialized = true
+                lastValue = newValue
+                changedLiveData.postValue(lastValue)
+            } else if ((newValue == null && lastValue != null || lastValue != newValue)) {
+                lastValue = newValue
+
+                changedLiveData.postValue(lastValue)
+            }
+        }
+    })
+
+    return changedLiveData
+}
+
 fun <T> MutableLiveData<T>.notify() {
     this.value = this.value
 }
