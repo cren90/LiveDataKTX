@@ -22,12 +22,23 @@ inline fun <T> MutableLiveData<T>.observe(
 
 fun <T : Any?> MutableLiveData<T>.default(initialValue: T) = apply { value = initialValue }
 
-inline fun <T> dependentLiveData(vararg dependencies: LiveData<*>, crossinline mapper: () -> T?) =
+inline fun <T> dependentLiveData(
+    vararg dependencies: LiveData<*>,
+    crossinline mapper: () -> T?
+): LiveData<T> =
     MediatorLiveData<T>().also { mediatorLiveData ->
         val observer = Observer<Any> { mediatorLiveData.value = mapper() }
         dependencies.forEach { dependencyLiveData ->
             mediatorLiveData.addSource(dependencyLiveData, observer)
         }
+    }
+
+inline fun <T, T1, T2> LiveData<T1>.join(
+    other: LiveData<T2>,
+    crossinline mapper: (a: T1?, b: T2?) -> T?
+): LiveData<T> =
+    dependentLiveData(this, other) {
+        mapper(this.value, other.value)
     }
 
 inline fun <T> LiveData<T>.observeChange(): LiveData<T> {
