@@ -64,17 +64,17 @@ inline fun <T> LiveData<T>.observeChange(): LiveData<T> {
 }
 
 fun <T> MutableLiveData<T>.notify() {
-    this.value = this.value
+    this.postValue(this.value)
 }
 
 fun <T : Any?> mutableLiveDataOf(initialValue: T? = null): MutableLiveData<T> =
     MutableLiveData<T>().apply {
-        value = initialValue
+        postValue(initialValue)
     }
 
 
 fun <T : Any?> liveDataOf(initialValue: T? = null): LiveData<T> = MutableLiveData<T>().apply {
-    value = initialValue
+    postValue(initialValue)
 }
 
 fun <T : Any?> nonNullMutableLiveDataOf(initialValue: T): NonNullMutableLiveData<T> =
